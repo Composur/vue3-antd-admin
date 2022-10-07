@@ -7,31 +7,37 @@
     "url": "https://github.com/buqiyuan"
   },
   "scripts": {
-    "dev": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build:test": "vue-cli-service build --mode test",
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json --max-warnings 0 && pretty-quick --check --branch dev",
+    "deploy": "npm run build && npx gh-pages -d dist",
     "build:preview": "npm run build && npx serve -s dist",
     "build:prod": "vue-cli-service build --mode production",
     "build:report": "vue-cli-service build --report && npx live-server --open=dist/report.html",
+    "build:test": "vue-cli-service build --mode test",
     "clean:lib": "npx rimraf node_modules",
-    "deploy": "npm run build && npx gh-pages -d dist",
+    "commit": "czg",
+    "dev": "npm run serve",
     "dev:debug": "cross-env DEBUG_ANTDV=true npm run serve",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:build-win": "vue-cli-service electron:build --win --x64",
+    "electron:serve": "vue-cli-service electron:serve",
     "format": "prettier --write .",
-    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json --max-warnings 0 && pretty-quick --check --branch dev",
-    "lint:fix": "eslint --fix . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json && pretty-quick --branch dev",
+    "gen:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "lint:eslint": "eslint --cache --max-warnings 0  \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
+    "lint:fix": "eslint --fix . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json && pretty-quick --branch dev",
+    "lint:lint-staged": "lint-staged",
     "lint:prettier": "prettier --write  \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
-    "lint:lint-staged": "lint-staged",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
     "prepare": "husky install",
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm run dev",
     "release": "git push && git push origin --tags",
-    "gen:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
-    "test:gzip": "npx http-server dist --cors --gzip -c-1",
     "test:br": "npx http-server dist --cors --brotli -c-1",
-    "commit": "czg"
+    "test:gzip": "npx http-server dist --cors --gzip -c-1"
   },
+  "main": "background.js",
   "dependencies": {
     "@ant-design/icons-vue": "~6.1.0",
     "@vueuse/core": "~9.2.0",
@@ -60,6 +66,7 @@
   "devDependencies": {
     "@commitlint/cli": "~17.1.2",
     "@commitlint/config-conventional": "~17.1.0",
+    "@types/electron-devtools-installer": "^2.2.0",
     "@types/lodash-es": "~4.17.6",
     "@types/node": "~18.7.18",
     "@types/webpack-env": "~1.18.0",
@@ -77,6 +84,8 @@
     "cross-env": "~7.0.3",
     "cz-git": "~1.3.11",
     "czg": "~1.3.11",
+    "electron": "^13.0.0",
+    "electron-devtools-installer": "^3.1.0",
     "eslint": "~8.23.1",
     "eslint-config-prettier": "~8.5.0",
     "eslint-plugin-import": "2.26.0",
@@ -101,17 +110,18 @@
     "stylelint-config-standard": "~28.0.0",
     "stylelint-order": "~5.0.0",
     "svg-sprite-loader": "~6.0.11",
+    "ts-loader": "~8.2.0",
     "ts-node": "^10.9.1",
     "typescript": "~4.7.4",
     "unplugin-vue-define-options": "~0.7.3",
+    "vue-cli-plugin-electron-builder": "~2.1.1",
     "vue-cli-plugin-windicss": "~1.1.6",
     "vue-eslint-parser": "~9.1.0",
     "vue-tsc": "^0.40.13"
   },
   "__npminstall_done": false,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/buqiyuan/vue3-antd-admin"
+  "engines": {
+    "node": ">=14"
   },
   "homepage": "https://buqiyuan.gitee.io/vue3-antd-admin",
   "keywords": [
@@ -124,9 +134,6 @@
     "typescript"
   ],
   "license": "MIT",
-  "engines": {
-    "node": ">=14"
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
@@ -147,5 +154,9 @@
     "*.md": [
       "prettier --write"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buqiyuan/vue3-antd-admin"
   }
 }

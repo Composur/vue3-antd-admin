@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # auto generate file
 components.d.ts
+
+#Electron-builder output
+/dist_electron
